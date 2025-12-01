@@ -237,8 +237,8 @@
             padding: 25px;
             margin-bottom: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 100% !important; /* FORCE FULL WIDTH */
-            display: block !important; /* FORCE BLOCK DISPLAY */
+            width: 100% !important;
+            display: block !important;
         }
         
         .full-width-card {
@@ -269,20 +269,20 @@
         /* Chart Containers - FULL WIDTH */
         .chart-container {
             height: 500px;
-            width: 100% !important; /* FORCE FULL WIDTH */
+            width: 100% !important;
             margin-top: 15px;
         }
         
         .gap-chart-container {
             height: 350px;
-            width: 100% !important; /* FORCE FULL WIDTH */
+            width: 100% !important;
             margin-top: 15px;
         }
         
         /* Gap Analysis Grid */
         .gap-analysis-grid {
             display: grid;
-            grid-template-columns: 1fr; /* Single column for Delayed VL */
+            grid-template-columns: 1fr;
             gap: 25px;
             margin-top: 20px;
             width: 100% !important;
@@ -455,7 +455,7 @@
 <body>
     <div class="loader" id="loader">
         <div class="spinner"></div>
-        <div class="loader-text" id="loaderText">Processing data...</div>
+        <div class="loader-text" id="loaderText">Loading Dashboard...</div>
     </div>
     
     <div class="container">
@@ -465,13 +465,55 @@
                 📊 Mkomani Clinic Society Weekly CBS Bulletin
             </h1>
             <div class="period" id="periodDisplay">Period: 24th - 28th Nov 2025</div>
-            <p>Upload your Excel files to generate the interactive dashboard</p>
+            <p>Interactive dashboard with actual CBS data for all sites</p>
+        </div>
+        
+        <!-- Quick Start Section -->
+        <div class="card" id="quickStartSection">
+            <div class="card-header">
+                <div class="card-title">
+                    🚀 Dashboard Ready to View
+                </div>
+            </div>
+            <div style="padding: 20px; text-align: center;">
+                <div style="background: rgba(39, 174, 96, 0.1); padding: 30px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3 style="color: var(--success); margin-bottom: 15px;">📊 Real Data Loaded</h3>
+                    <p style="color: var(--dark); margin-bottom: 20px; line-height: 1.6;">
+                        The dashboard contains actual CBS data for all 14 sites.<br>
+                        Click below to view the complete analysis with real metrics.
+                    </p>
+                    <button class="btn btn-success" onclick="loadRealData()" style="width: 100%; max-width: 300px; margin: 0 auto;">
+                        🚀 View Dashboard with Real Data
+                    </button>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px;">
+                    <div style="background: rgba(52, 152, 219, 0.1); padding: 15px; border-radius: 10px;">
+                        <div style="font-size: 24px; font-weight: bold; color: var(--secondary);">14</div>
+                        <div style="color: var(--dark); font-size: 14px;">Active Sites</div>
+                    </div>
+                    <div style="background: rgba(243, 156, 18, 0.1); padding: 15px; border-radius: 10px;">
+                        <div style="font-size: 24px; font-weight: bold; color: var(--warning);">589/644</div>
+                        <div style="color: var(--dark); font-size: 14px;">Total Gaps</div>
+                    </div>
+                    <div style="background: rgba(46, 204, 113, 0.1); padding: 15px; border-radius: 10px;">
+                        <div style="font-size: 24px; font-weight: bold; color: var(--success);">92.9%</div>
+                        <div style="color: var(--dark); font-size: 14px;">Reporting Rate</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: rgba(241, 196, 15, 0.1); border-radius: 10px;">
+                    <p style="color: var(--dark); font-size: 14px;">
+                        <strong>Note:</strong> This dashboard contains real CBS data. You can also upload new Excel files to update the analysis.
+                    </p>
+                </div>
+            </div>
         </div>
         
         <!-- File Upload Section -->
-        <div class="upload-section" id="uploadSection">
+        <div class="upload-section" id="uploadSection" style="display: none;">
             <div class="upload-title">
-                📁 Upload Weekly CBS Excel Files
+                📁 Upload New Excel Files
             </div>
             
             <div class="alert alert-danger" id="errorAlert" style="display: none;">
@@ -503,45 +545,37 @@
                 <button class="btn btn-primary" onclick="processUploadedFiles()" id="generateBtn" disabled>
                     🚀 Generate Dashboard
                 </button>
-                <button class="btn btn-success" onclick="showSampleData()">
-                    👁️ Preview with Sample Data
+                <button class="btn" onclick="showDashboard()" style="background: var(--light); color: var(--dark);">
+                    ↩️ Back to Dashboard
                 </button>
             </div>
         </div>
         
         <!-- Dashboard Section -->
-        <div class="dashboard-section" id="dashboardSection">
+        <div class="dashboard-section" id="dashboardSection" style="display: none;">
             <!-- KPI Overview -->
-            <div class="kpi-grid" id="kpiSection">
-                <!-- KPI cards will be populated here -->
-            </div>
+            <div class="kpi-grid" id="kpiSection"></div>
             
-            <!-- Reporting Rate Chart - FULL WIDTH FIXED -->
+            <!-- Reporting Rate Chart -->
             <div class="card full-width-card">
                 <div class="card-header">
-                    <div class="card-title">
-                        📈 CBS Reporting Rate by Site 
-                    </div>
+                    <div class="card-title">📈 Reporting Rate by Site (Descending Order)</div>
                 </div>
                 <div class="chart-container" id="reportingRateChart"></div>
             </div>
             
-            <!-- Consistency Rate Chart - FULL WIDTH FIXED -->
+            <!-- Consistency Rate Chart -->
             <div class="card full-width-card">
                 <div class="card-header">
-                    <div class="card-title">
-                        📊 CBS Consistency Rate by Site 
-                    </div>
+                    <div class="card-title">📊 Consistency Rate by Site (Descending Order)</div>
                 </div>
                 <div class="chart-container" id="consistencyChart"></div>
             </div>
             
-            <!-- NEW: Gap Distribution by Facility Chart -->
+            <!-- Gap Distribution by Facility Chart -->
             <div class="card full-width-card">
                 <div class="card-header">
-                    <div class="card-title">
-                        📊 Gap Distribution by Facility (Ranked Highest to Lowest)
-                    </div>
+                    <div class="card-title">📊 Gap Distribution by Facility (Ranked Highest to Lowest)</div>
                 </div>
                 <div class="chart-container" id="gapDistributionChart"></div>
             </div>
@@ -549,46 +583,26 @@
             <!-- Gap Analysis by Indicator -->
             <div class="card full-width-card">
                 <div class="card-header">
-                    <div class="card-title">
-                        🔍 Gap Analysis by Indicator (Facilities Affected)
-                    </div>
+                    <div class="card-title">🔍 Gap Analysis by Indicator (Facilities Affected)</div>
                 </div>
-                
-                <!-- Delayed VL - FULL WIDTH -->
-                <div id="delayedVLChartContainer" style="margin-bottom: 30px; width: 100%;">
-                    <!-- Will be populated dynamically -->
-                </div>
-                
-                <!-- Other Gaps Grid -->
-                <div class="other-gaps-grid" id="otherGapsGrid">
-                    <!-- Other gap charts will be populated here -->
-                </div>
+                <div id="delayedVLChartContainer" style="margin-bottom: 30px; width: 100%;"></div>
+                <div class="other-gaps-grid" id="otherGapsGrid"></div>
             </div>
             
             <!-- Discussion Canvas -->
             <div class="card discussion-canvas">
                 <div class="card-header">
-                    <div class="card-title">
-                        💬 Discussion & Recommendations
-                    </div>
+                    <div class="card-title">💬 Discussion & Recommendations</div>
                 </div>
-                
-                <!-- Gap Summary -->
                 <div style="margin-bottom: 30px;">
                     <h3 style="color: var(--primary); margin-bottom: 15px;">📋 Gap Summary Analysis</h3>
-                    <div id="gapSummary">
-                        <!-- Gap summary will be populated here -->
-                    </div>
+                    <div id="gapSummary"></div>
                 </div>
-                
-                <!-- Recommendations -->
                 <div>
                     <h3 style="color: var(--primary); margin-bottom: 15px;">🎯 Recommendations & Mitigation Strategies</h3>
                     <div class="recommendation-grid">
                         <div class="recommendation-card reporting">
-                            <div class="recommendation-title">
-                                📊 For Reporting Rate Improvement:
-                            </div>
+                            <div class="recommendation-title">📊 For Reporting Rate Improvement:</div>
                             <ul style="padding-left: 20px; color: var(--dark); line-height: 1.6;">
                                 <li><strong>Daily monitoring</strong> of reporting status at site level</li>
                                 <li><strong>Designate reporting champions</strong> at each site</li>
@@ -596,11 +610,8 @@
                                 <li>Conduct <strong>weekly review meetings</strong> with site supervisors</li>
                             </ul>
                         </div>
-                        
                         <div class="recommendation-card consistency">
-                            <div class="recommendation-title">
-                                ✅ For Gap Improvement:
-                            </div>
+                            <div class="recommendation-title">✅ For Gap Improvement:</div>
                             <ul style="padding-left: 20px; color: var(--dark); line-height: 1.6;">
                                 <li><strong>Conduct weekly CBS meetings</strong> across all sites</li>
                                 <li>Conduct <strong>root cause analysis (RCA)</strong> across all sites</li>
@@ -608,11 +619,8 @@
                                 <li>Track <strong>Progress or new gaps on a daily basis</strong> proactive monitoring</li>
                             </ul>
                         </div>
-                        
                         <div class="recommendation-card mitigation">
-                            <div class="recommendation-title">
-                                ⚡ Technical & Infrastructure:
-                            </div>
+                            <div class="recommendation-title">⚡ Technical & Infrastructure:</div>
                             <ul style="padding-left: 20px; color: var(--dark); line-height: 1.6;">
                                 <li>Address <strong>internet connectivity issues</strong> at affected sites</li>
                                 <li>Ensure <strong>uninterrupted power supply</strong> during reporting hours</li>
@@ -622,8 +630,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Action Plan -->
                 <div style="margin-top: 30px; padding: 20px; background: rgba(52, 152, 219, 0.1); border-radius: 10px;">
                     <h4 style="color: var(--primary); margin-bottom: 10px;">📅 Immediate Action Plan:</h4>
                     <div style="color: var(--dark);">
@@ -636,12 +642,10 @@
             
             <!-- Export Buttons -->
             <div style="text-align: center; margin-top: 30px;">
-                <button class="btn btn-primary" onclick="printDashboard()">
-                    🖨️ Print Dashboard
-                </button>
-                <button class="btn" onclick="resetDashboard()" style="background: var(--light); color: var(--dark);">
-                    🔄 Upload New Data
-                </button>
+                <button class="btn btn-primary" onclick="printDashboard()">🖨️ Print Dashboard</button>
+                <button class="btn btn-success" onclick="exportDataToCSV()">📊 Export Data to CSV</button>
+                <button class="btn" onclick="showUploadSection()" style="background: var(--secondary); color: white;">📁 Upload New Data</button>
+                <button class="btn" onclick="loadRealData()" style="background: var(--light); color: var(--dark);">🔄 Refresh Dashboard</button>
             </div>
         </div>
         
@@ -653,23 +657,894 @@
     </div>
 
     <script>
-        // Global data storage
+        // ======================
+        // REAL DATA - EMBEDDED
+        // ======================
+        
+        const REAL_DATA = {
+            "metadata": {
+                "generated": "2025-12-01 14:47:23",
+                "period": "24th - 28th Nov 2025",
+                "total_sites": 14,
+                "data_source": "Weekly CBS Reports"
+            },
+            "gap_data": [
+                {
+                    "site": "Overall",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 9, "eligible": 16, "gap_percentage": 56.25},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 7, "eligible": 7, "gap_percentage": 100.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 570, "eligible": 644, "gap_percentage": 88.50931677018633},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 2, "eligible": 2, "gap_percentage": 100.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 1, "eligible": 9, "gap_percentage": 11.11111111111111}
+                    ]
+                },
+                {
+                    "site": "Bomu Alwalidayn",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 0, "eligible": 3, "gap_percentage": 0.0},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 3, "eligible": 3, "gap_percentage": 100.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 33, "eligible": 38, "gap_percentage": 86.8421052631579},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 0, "eligible": 2, "gap_percentage": 0.0}
+                    ]
+                },
+                {
+                    "site": "Bomu Likoni",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 3, "eligible": 3, "gap_percentage": 100.0},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 159, "eligible": 170, "gap_percentage": 93.52941176470588},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 1, "eligible": 1, "gap_percentage": 100.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 0, "eligible": 1, "gap_percentage": 0.0}
+                    ]
+                },
+                {
+                    "site": "Bomu Changamwe",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 2, "eligible": 2, "gap_percentage": 100.0},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 1, "eligible": 1, "gap_percentage": 100.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 172, "eligible": 206, "gap_percentage": 83.49514563106796},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 1, "eligible": 3, "gap_percentage": 33.33333333333333}
+                    ]
+                },
+                {
+                    "site": "Bomu OldTown",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 0, "eligible": 0, "gap_percentage": 0.0}
+                    ]
+                },
+                {
+                    "site": "Bomu Bombolulu",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 10, "eligible": 16, "gap_percentage": 62.5},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 1, "eligible": 1, "gap_percentage": 100.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 0, "eligible": 2, "gap_percentage": 0.0}
+                    ]
+                },
+                {
+                    "site": "Bomu Mariakani",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 1, "eligible": 1, "gap_percentage": 100.0},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 93, "eligible": 95, "gap_percentage": 97.89473684210527},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 0, "eligible": 1, "gap_percentage": 0.0}
+                    ]
+                },
+                {
+                    "site": "Bomu Timboni",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 26, "eligible": 28, "gap_percentage": 92.85714285714286},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 0, "eligible": 0, "gap_percentage": 0.0}
+                    ]
+                },
+                {
+                    "site": "CBHC Chaani",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 3, "eligible": 5, "gap_percentage": 60.0},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 0, "eligible": 0, "gap_percentage": 0.0}
+                    ]
+                },
+                {
+                    "site": "CBHC Mbungoni",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 3, "eligible": 3, "gap_percentage": 100.0},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 2, "eligible": 2, "gap_percentage": 100.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 19, "eligible": 24, "gap_percentage": 79.16666666666666},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 0, "eligible": 0, "gap_percentage": 0.0}
+                    ]
+                },
+                {
+                    "site": "CBHC Mikindani",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 0, "eligible": 1, "gap_percentage": 0.0},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 9, "eligible": 13, "gap_percentage": 69.23076923076923},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 0, "eligible": 0, "gap_percentage": 0.0}
+                    ]
+                },
+                {
+                    "site": "St. Lukes (ACK)",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 0, "eligible": 3, "gap_percentage": 0.0},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 38, "eligible": 41, "gap_percentage": 92.6829268292683},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 0, "eligible": 0, "gap_percentage": 0.0}
+                    ]
+                },
+                {
+                    "site": "St. Joseph Bura",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 0, "eligible": 0, "gap_percentage": 0.0}
+                    ]
+                },
+                {
+                    "site": "St. Joseph Maungu",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 0, "eligible": 0, "gap_percentage": 0.0}
+                    ]
+                },
+                {
+                    "site": "St. Joseph Shelter",
+                    "indicators": [
+                        {"indicator": "HIV +ve Clients Not Linked to ART", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", "gap": 1, "eligible": 1, "gap_percentage": 100.0},
+                        {"indicator": "Virally Unsuppressed Clients Without EAC Within 2 Weeks", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "Delayed Viral Load Testing", "gap": 8, "eligible": 8, "gap_percentage": 100.0},
+                        {"indicator": "HEI (6-8 Weeks) Without DNA PCR Results", "gap": 0, "eligible": 0, "gap_percentage": 0.0},
+                        {"indicator": "HEI (24 Months) Without Final Documented Outcome", "gap": 0, "eligible": 0, "gap_percentage": 0.0}
+                    ]
+                }
+            ],
+            "reporting_data": [
+                {"site": "Overall", "expected_uploads": 14, "overall_reporting_rate": 13, "overall_consistency_rate": 8, "reporting_rate_percentage": 92.85714285714286, "consistency_rate_percentage": 57.14285714285714},
+                {"site": "Bomu Alwalidayn", "expected_uploads": 7, "overall_reporting_rate": 3, "overall_consistency_rate": 0, "reporting_rate_percentage": 42.857142857142854, "consistency_rate_percentage": 0.0},
+                {"site": "Bomu Likoni", "expected_uploads": 7, "overall_reporting_rate": 7, "overall_consistency_rate": 7, "reporting_rate_percentage": 100.0, "consistency_rate_percentage": 100.0},
+                {"site": "Bomu Changamwe", "expected_uploads": 7, "overall_reporting_rate": 7, "overall_consistency_rate": 7, "reporting_rate_percentage": 100.0, "consistency_rate_percentage": 100.0},
+                {"site": "Bomu OldTown", "expected_uploads": 7, "overall_reporting_rate": 2, "overall_consistency_rate": 0, "reporting_rate_percentage": 28.57142857142857, "consistency_rate_percentage": 0.0},
+                {"site": "Bomu Bombolulu", "expected_uploads": 7, "overall_reporting_rate": 6, "overall_consistency_rate": 1, "reporting_rate_percentage": 85.71428571428571, "consistency_rate_percentage": 14.285714285714285},
+                {"site": "Bomu Mariakani", "expected_uploads": 7, "overall_reporting_rate": 7, "overall_consistency_rate": 7, "reporting_rate_percentage": 100.0, "consistency_rate_percentage": 100.0},
+                {"site": "Bomu Timboni", "expected_uploads": 7, "overall_reporting_rate": 3, "overall_consistency_rate": 0, "reporting_rate_percentage": 42.857142857142854, "consistency_rate_percentage": 0.0},
+                {"site": "CBHC Chaani", "expected_uploads": 7, "overall_reporting_rate": 6, "overall_consistency_rate": 0, "reporting_rate_percentage": 85.71428571428571, "consistency_rate_percentage": 0.0},
+                {"site": "CBHC Mbungoni", "expected_uploads": 7, "overall_reporting_rate": 6, "overall_consistency_rate": 4, "reporting_rate_percentage": 85.71428571428571, "consistency_rate_percentage": 57.14285714285714},
+                {"site": "CBHC Mikindani", "expected_uploads": 7, "overall_reporting_rate": 4, "overall_consistency_rate": 0, "reporting_rate_percentage": 57.14285714285714, "consistency_rate_percentage": 0.0},
+                {"site": "St. Lukes (ACK)", "expected_uploads": 7, "overall_reporting_rate": 6, "overall_consistency_rate": 4, "reporting_rate_percentage": 85.71428571428571, "consistency_rate_percentage": 57.14285714285714},
+                {"site": "St. Joseph Bura", "expected_uploads": 7, "overall_reporting_rate": 6, "overall_consistency_rate": 7, "reporting_rate_percentage": 85.71428571428571, "consistency_rate_percentage": 100.0},
+                {"site": "St. Joseph Maungu", "expected_uploads": 7, "overall_reporting_rate": 0, "overall_consistency_rate": 0, "reporting_rate_percentage": 0.0, "consistency_rate_percentage": 0.0},
+                {"site": "St. Joseph Shelter", "expected_uploads": 7, "overall_reporting_rate": 7, "overall_consistency_rate": 4, "reporting_rate_percentage": 100.0, "consistency_rate_percentage": 57.14285714285714}
+            ]
+        };
+        
+        // ======================
+        // GLOBAL VARIABLES
+        // ======================
+        
         let dashboardData = {
             gap_data: [],
             reporting_data: [],
-            metadata: {
-                period: "24th - 28th Nov 2025",
-                generated: new Date().toISOString()
-            }
+            metadata: {}
         };
         
-        // File handling
         let uploadedFiles = {};
         
-        // Initialize file upload
+        // ======================
+        // INITIALIZATION
+        // ======================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show quick start section initially
+            document.getElementById('quickStartSection').style.display = 'block';
+            document.getElementById('uploadSection').style.display = 'none';
+            document.getElementById('dashboardSection').style.display = 'none';
+            
+            // Update period display
+            document.getElementById('periodDisplay').textContent = `Period: ${REAL_DATA.metadata.period}`;
+        });
+        
+        // ======================
+        // MAIN FUNCTIONS
+        // ======================
+        
+        function loadRealData() {
+            showLoader('Loading dashboard with real data...');
+            
+            // Use the embedded real data
+            dashboardData = {
+                gap_data: REAL_DATA.gap_data,
+                reporting_data: REAL_DATA.reporting_data,
+                metadata: {
+                    period: REAL_DATA.metadata.period,
+                    generated: new Date().toISOString(),
+                    note: "Actual CBS data loaded"
+                }
+            };
+            
+            // Generate dashboard
+            generateDashboard();
+            
+            // Show dashboard and hide others
+            document.getElementById('dashboardSection').style.display = 'block';
+            document.getElementById('quickStartSection').style.display = 'none';
+            document.getElementById('uploadSection').style.display = 'none';
+            
+            // Scroll to dashboard
+            setTimeout(() => {
+                document.getElementById('dashboardSection').scrollIntoView({ behavior: 'smooth' });
+                hideLoader();
+            }, 500);
+        }
+        
+        function showDashboard() {
+            document.getElementById('dashboardSection').style.display = 'block';
+            document.getElementById('quickStartSection').style.display = 'none';
+            document.getElementById('uploadSection').style.display = 'none';
+        }
+        
+        function showUploadSection() {
+            document.getElementById('uploadSection').style.display = 'block';
+            document.getElementById('dashboardSection').style.display = 'none';
+            document.getElementById('quickStartSection').style.display = 'none';
+            window.scrollTo(0, 0);
+        }
+        
+        // ======================
+        // DASHBOARD FUNCTIONS
+        // ======================
+        
+        function generateDashboard() {
+            createKPIOverview();
+            createReportingRateChart();
+            createConsistencyChart();
+            createGapDistributionChart();
+            createGapAnalysisByIndicator();
+            createGapSummary();
+        }
+        
+        function createKPIOverview() {
+            const kpiSection = document.getElementById('kpiSection');
+            const overallData = dashboardData.reporting_data.find(d => d.site === 'Overall') || dashboardData.reporting_data[0];
+            
+            let totalGaps = 0;
+            let totalEligible = 0;
+            
+            dashboardData.gap_data.forEach(site => {
+                if (site.site !== 'Overall') {
+                    site.indicators.forEach(indicator => {
+                        totalGaps += indicator.gap;
+                        totalEligible += indicator.eligible;
+                    });
+                }
+            });
+            
+            const gapPercentage = totalEligible > 0 ? ((totalGaps / totalEligible) * 100).toFixed(1) : 0;
+            const activeSites = dashboardData.reporting_data.filter(d => d.site !== 'Overall').length;
+            
+            const kpiHTML = `
+                <div class="kpi-card">
+                    <div class="kpi-value" style="color: var(--success)">
+                        ${overallData ? overallData.reporting_rate_percentage.toFixed(1) + '%' : 'N/A'}
+                    </div>
+                    <div class="kpi-label">OVERALL REPORTING RATE</div>
+                    <div class="kpi-subtext">
+                        ${overallData ? overallData.overall_reporting_rate + '/' + overallData.expected_uploads + ' reports' : ''}
+                    </div>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-value" style="color: var(--secondary)">
+                        ${overallData ? overallData.consistency_rate_percentage.toFixed(1) + '%' : 'N/A'}
+                    </div>
+                    <div class="kpi-label">OVERALL CONSISTENCY RATE</div>
+                    <div class="kpi-subtext">Average across all sites</div>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-value" style="color: var(--warning)">${totalGaps}/${totalEligible}</div>
+                    <div class="kpi-label">TOTAL GAPS IDENTIFIED</div>
+                    <div class="kpi-subtext">${gapPercentage}% of eligible cases</div>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-value" style="color: var(--danger)">${activeSites}</div>
+                    <div class="kpi-label">ACTIVE SITES</div>
+                    <div class="kpi-subtext">Currently reporting</div>
+                </div>
+            `;
+            
+            kpiSection.innerHTML = kpiHTML;
+        }
+        
+        function createReportingRateChart() {
+            const sortedData = dashboardData.reporting_data
+                .filter(d => d.site !== 'Overall')
+                .sort((a, b) => b.reporting_rate_percentage - a.reporting_rate_percentage);
+            
+            const sites = sortedData.map(d => d.site);
+            const reportingRates = sortedData.map(d => d.reporting_rate_percentage);
+            const expected = sortedData.map(d => d.expected_uploads);
+            const reported = sortedData.map(d => d.overall_reporting_rate);
+            
+            const hoverText = sites.map((site, i) => 
+                `<b>${site}</b><br>` +
+                `Reporting Rate: ${reportingRates[i].toFixed(1)}%<br>` +
+                `Reports: ${reported[i]}/${expected[i]}<br>` +
+                `Status: ${reportingRates[i] >= 80 ? 'Good' : reportingRates[i] >= 50 ? 'Fair' : 'Needs Attention'}`
+            );
+            
+            const trace = {
+                x: sites,
+                y: reportingRates,
+                type: 'bar',
+                marker: {
+                    color: reportingRates.map(rate => 
+                        rate >= 80 ? '#27ae60' : 
+                        rate >= 50 ? '#f39c12' : '#e74c3c'
+                    )
+                },
+                text: reportingRates.map(rate => rate.toFixed(1) + '%'),
+                textposition: 'outside',
+                hovertext: hoverText,
+                hoverinfo: 'text'
+            };
+            
+            const layout = {
+                title: {
+                    text: 'Reporting Rate by Site (Descending Order)',
+                    font: { size: 18 }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Reporting Rate (%)',
+                        font: { size: 14 }
+                    },
+                    range: [0, 105],
+                    gridcolor: '#ecf0f1',
+                    tickformat: ',.0f'
+                },
+                xaxis: {
+                    title: {
+                        text: 'Site',
+                        font: { size: 14 }
+                    },
+                    tickangle: -45,
+                    gridcolor: '#ecf0f1',
+                    tickfont: { size: 12 }
+                },
+                plot_bgcolor: '#f8f9fa',
+                paper_bgcolor: '#f8f9fa',
+                showlegend: false,
+                displayModeBar: false,
+                margin: { t: 60, r: 40, b: 150, l: 80 },
+                height: 500
+            };
+            
+            Plotly.newPlot('reportingRateChart', [trace], layout, {displayModeBar: false});
+        }
+        
+        function createConsistencyChart() {
+            const sortedData = dashboardData.reporting_data
+                .filter(d => d.site !== 'Overall')
+                .sort((a, b) => b.consistency_rate_percentage - a.consistency_rate_percentage);
+            
+            const sites = sortedData.map(d => d.site);
+            const consistencyRates = sortedData.map(d => d.consistency_rate_percentage);
+            const expected = sortedData.map(d => d.expected_uploads);
+            const consistent = sortedData.map(d => d.overall_consistency_rate);
+            
+            const hoverText = sites.map((site, i) => 
+                `<b>${site}</b><br>` +
+                `Consistency Rate: ${consistencyRates[i].toFixed(1)}%<br>` +
+                `Consistent Reports: ${consistent[i]}/${expected[i]}<br>` +
+                `Status: ${consistencyRates[i] >= 80 ? 'Good' : consistencyRates[i] >= 50 ? 'Fair' : 'Needs Attention'}`
+            );
+            
+            const trace = {
+                x: sites,
+                y: consistencyRates,
+                type: 'bar',
+                marker: {
+                    color: consistencyRates.map(rate => 
+                        rate >= 80 ? '#27ae60' : 
+                        rate >= 50 ? '#f39c12' : '#e74c3c'
+                    )
+                },
+                text: consistencyRates.map(rate => rate.toFixed(1) + '%'),
+                textposition: 'outside',
+                hovertext: hoverText,
+                hoverinfo: 'text'
+            };
+            
+            const layout = {
+                title: {
+                    text: 'Consistency Rate by Site (Descending Order)',
+                    font: { size: 18 }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Consistency Rate (%)',
+                        font: { size: 14 }
+                    },
+                    range: [0, 105],
+                    gridcolor: '#ecf0f1',
+                    tickformat: ',.0f'
+                },
+                xaxis: {
+                    title: {
+                        text: 'Site',
+                        font: { size: 14 }
+                    },
+                    tickangle: -45,
+                    gridcolor: '#ecf0f1',
+                    tickfont: { size: 12 }
+                },
+                plot_bgcolor: '#f8f9fa',
+                paper_bgcolor: '#f8f9fa',
+                showlegend: false,
+                displayModeBar: false,
+                margin: { t: 60, r: 40, b: 150, l: 80 },
+                height: 500
+            };
+            
+            Plotly.newPlot('consistencyChart', [trace], layout, {displayModeBar: false});
+        }
+        
+        function createGapDistributionChart() {
+            const facilityGapData = [];
+            
+            dashboardData.gap_data.forEach(site => {
+                if (site.site !== 'Overall') {
+                    let totalGaps = 0;
+                    let totalEligible = 0;
+                    
+                    site.indicators.forEach(indicator => {
+                        totalGaps += indicator.gap;
+                        totalEligible += indicator.eligible;
+                    });
+                    
+                    const gapPercentage = totalEligible > 0 ? ((totalGaps / totalEligible) * 100).toFixed(1) : 0;
+                    
+                    facilityGapData.push({
+                        site: site.site,
+                        totalGaps: totalGaps,
+                        totalEligible: totalEligible,
+                        gapPercentage: parseFloat(gapPercentage),
+                        displayText: `${site.site} ${gapPercentage}% (${totalGaps}/${totalEligible})`
+                    });
+                }
+            });
+            
+            facilityGapData.sort((a, b) => b.gapPercentage - a.gapPercentage);
+            
+            const sites = facilityGapData.map(d => d.displayText);
+            const gapPercentages = facilityGapData.map(d => d.gapPercentage);
+            const totalGaps = facilityGapData.map(d => d.totalGaps);
+            const totalEligible = facilityGapData.map(d => d.totalEligible);
+            
+            const hoverText = sites.map((site, i) => 
+                `<b>${facilityGapData[i].site}</b><br>` +
+                `Overall Gap Percentage: ${gapPercentages[i]}%<br>` +
+                `Total Gaps: ${totalGaps[i]}/${totalEligible[i]}<br>` +
+                `Rank: #${i + 1}`
+            );
+            
+            const trace = {
+                x: sites,
+                y: gapPercentages,
+                type: 'bar',
+                marker: {
+                    color: gapPercentages.map(percentage => {
+                        if (percentage >= 70) return '#e74c3c';
+                        if (percentage >= 50) return '#f39c12';
+                        if (percentage >= 30) return '#f1c40f';
+                        return '#27ae60';
+                    }),
+                    line: {
+                        color: 'rgba(0,0,0,0.2)',
+                        width: 1
+                    }
+                },
+                text: gapPercentages.map(p => p + '%'),
+                textposition: 'outside',
+                hovertext: hoverText,
+                hoverinfo: 'text'
+            };
+            
+            const layout = {
+                title: {
+                    text: 'Gap Distribution by Facility (Ranked Highest to Lowest)',
+                    font: { size: 18 }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Overall Gap Percentage (%)',
+                        font: { size: 14 }
+                    },
+                    range: [0, 105],
+                    gridcolor: '#ecf0f1',
+                    tickformat: ',.0f'
+                },
+                xaxis: {
+                    title: {
+                        text: 'Facility (Gap Percentage - Gaps/Eligible)',
+                        font: { size: 14 }
+                    },
+                    tickangle: -45,
+                    gridcolor: '#ecf0f1',
+                    tickfont: { size: 12 }
+                },
+                plot_bgcolor: '#f8f9fa',
+                paper_bgcolor: '#f8f9fa',
+                showlegend: false,
+                displayModeBar: false,
+                margin: { t: 60, r: 40, b: 200, l: 80 },
+                height: 500
+            };
+            
+            Plotly.newPlot('gapDistributionChart', [trace], layout, {displayModeBar: false});
+        }
+        
+        function createGapAnalysisByIndicator() {
+            const delayedVLContainer = document.getElementById('delayedVLChartContainer');
+            const otherGapsGrid = document.getElementById('otherGapsGrid');
+            
+            const indicators = [
+                { 
+                    fullName: "Delayed Viral Load Testing",
+                    shortName: "Delayed VL",
+                    color: '#e67e22',
+                    index: 3,
+                    priority: 1
+                },
+                { 
+                    fullName: "HEI (24 Months) Without Final Documented Outcome",
+                    shortName: "HEI No Outcome",
+                    color: '#c0392b',
+                    index: 5,
+                    priority: 0
+                },
+                { 
+                    fullName: "HIV +ve Clients Not Linked to ART",
+                    shortName: "HIV+ Not Linked",
+                    color: '#e74c3c',
+                    index: 0,
+                    priority: 0
+                },
+                { 
+                    fullName: "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP",
+                    shortName: "High-Risk No PrEP",
+                    color: '#f39c12',
+                    index: 1,
+                    priority: 0
+                },
+                { 
+                    fullName: "Virally Unsuppressed Clients Without EAC Within 2 Weeks",
+                    shortName: "Unsuppressed No EAC",
+                    color: '#f1c40f',
+                    index: 2,
+                    priority: 0
+                },
+                { 
+                    fullName: "HEI (6-8 Weeks) Without DNA PCR Results",
+                    shortName: "HEI No DNA PCR",
+                    color: '#d35400',
+                    index: 4,
+                    priority: 0
+                }
+            ];
+            
+            delayedVLContainer.innerHTML = '';
+            otherGapsGrid.innerHTML = '';
+            
+            indicators.forEach((indicator, indicatorIdx) => {
+                const sitesWithGaps = [];
+                
+                dashboardData.gap_data.forEach(site => {
+                    if (site.site !== 'Overall' && site.indicators[indicator.index]) {
+                        const gapData = site.indicators[indicator.index];
+                        if (gapData.gap > 0) {
+                            sitesWithGaps.push({
+                                site: site.site,
+                                gap: gapData.gap,
+                                eligible: gapData.eligible,
+                                percentage: gapData.gap_percentage
+                            });
+                        }
+                    }
+                });
+                
+                sitesWithGaps.sort((a, b) => b.gap - a.gap);
+                
+                if (sitesWithGaps.length > 0) {
+                    const siteNames = sitesWithGaps.map(d => d.site);
+                    const gaps = sitesWithGaps.map(d => d.gap);
+                    const percentages = sitesWithGaps.map(d => d.percentage);
+                    
+                    const totalGaps = gaps.reduce((a, b) => a + b, 0);
+                    const totalEligible = sitesWithGaps.reduce((sum, d) => sum + d.eligible, 0);
+                    const overallPercentage = totalEligible > 0 ? ((totalGaps / totalEligible) * 100).toFixed(1) : 0;
+                    
+                    const chartId = `gapChart${indicator.index}`;
+                    
+                    if (indicator.priority === 1) {
+                        delayedVLContainer.innerHTML = `
+                            <div class="gap-indicator-card" style="border-left: 4px solid ${indicator.color};">
+                                <div class="gap-indicator-title">
+                                    ${indicator.shortName} - ${totalGaps} gaps (${overallPercentage}% of ${totalEligible} eligible)
+                                </div>
+                                <div id="${chartId}" class="chart-container"></div>
+                            </div>
+                        `;
+                        
+                        setTimeout(() => {
+                            createFullWidthGapChart(chartId, indicator.shortName, siteNames, gaps, percentages, indicator.color, totalGaps, overallPercentage, totalEligible);
+                        }, 100);
+                    } else {
+                        const gapCard = document.createElement('div');
+                        gapCard.className = 'gap-indicator-card';
+                        gapCard.style.borderLeft = `4px solid ${indicator.color}`;
+                        gapCard.innerHTML = `
+                            <div class="gap-indicator-title">
+                                ${indicator.shortName} - ${totalGaps} gaps (${overallPercentage}% of ${totalEligible} eligible)
+                            </div>
+                            <div id="${chartId}" class="gap-chart-container"></div>
+                        `;
+                        otherGapsGrid.appendChild(gapCard);
+                        
+                        setTimeout(() => {
+                            createSmallGapChart(chartId, indicator.shortName, siteNames, gaps, percentages, indicator.color);
+                        }, 100 + (indicatorIdx * 50));
+                    }
+                }
+            });
+        }
+        
+        function createFullWidthGapChart(containerId, indicatorName, sites, gaps, percentages, color, totalGaps, overallPercentage, totalEligible) {
+            const hoverText = sites.map((site, i) => 
+                `<b>${site}</b><br>` +
+                `Gaps: ${gaps[i]}<br>` +
+                `Percentage: ${percentages[i].toFixed(1)}%<br>` +
+                `Impact: ${gaps[i] > 50 ? 'Critical' : gaps[i] > 20 ? 'High' : gaps[i] > 5 ? 'Medium' : 'Low'}`
+            );
+            
+            const trace = {
+                x: sites,
+                y: gaps,
+                type: 'bar',
+                marker: {
+                    color: color,
+                    line: {
+                        color: 'rgba(0,0,0,0.2)',
+                        width: 1
+                    }
+                },
+                text: gaps.map((gap, i) => `${gap} (${percentages[i].toFixed(1)}%)`),
+                textposition: 'outside',
+                hovertext: hoverText,
+                hoverinfo: 'text'
+            };
+            
+            const layout = {
+                title: {
+                    text: `${indicatorName} - ${totalGaps} Gaps (${overallPercentage}% of ${totalEligible} Eligible)`,
+                    font: { size: 18 }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Number of Gaps',
+                        font: { size: 14 }
+                    },
+                    gridcolor: '#ecf0f1'
+                },
+                xaxis: {
+                    title: {
+                        text: 'Facility',
+                        font: { size: 14 }
+                    },
+                    tickangle: -45,
+                    gridcolor: '#ecf0f1',
+                    tickfont: { size: 12 }
+                },
+                plot_bgcolor: '#f8f9fa',
+                paper_bgcolor: '#f8f9fa',
+                showlegend: false,
+                displayModeBar: false,
+                margin: { t: 60, r: 40, b: 150, l: 80 },
+                height: 500
+            };
+            
+            Plotly.newPlot(containerId, [trace], layout, {displayModeBar: false});
+        }
+        
+        function createSmallGapChart(containerId, indicatorName, sites, gaps, percentages, color) {
+            const hoverText = sites.map((site, i) => 
+                `<b>${site}</b><br>` +
+                `Gaps: ${gaps[i]}<br>` +
+                `Percentage: ${percentages[i].toFixed(1)}%<br>` +
+                `Impact: ${gaps[i] > 10 ? 'High' : gaps[i] > 5 ? 'Medium' : 'Low'}`
+            );
+            
+            const trace = {
+                x: sites,
+                y: gaps,
+                type: 'bar',
+                marker: {
+                    color: color,
+                    line: {
+                        color: 'rgba(0,0,0,0.2)',
+                        width: 1
+                    }
+                },
+                text: gaps.map((gap, i) => `${gap} (${percentages[i].toFixed(1)}%)`),
+                textposition: 'outside',
+                hovertext: hoverText,
+                hoverinfo: 'text'
+            };
+            
+            const layout = {
+                title: {
+                    text: `Facilities with ${indicatorName} Gaps`,
+                    font: { size: 16 }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Number of Gaps',
+                        font: { size: 12 }
+                    },
+                    gridcolor: '#ecf0f1'
+                },
+                xaxis: {
+                    title: {
+                        text: 'Facility',
+                        font: { size: 12 }
+                    },
+                    tickangle: -45,
+                    gridcolor: '#ecf0f1',
+                    tickfont: { size: 10 }
+                },
+                plot_bgcolor: '#f8f9fa',
+                paper_bgcolor: '#f8f9fa',
+                showlegend: false,
+                displayModeBar: false,
+                margin: { t: 50, r: 30, b: 120, l: 60 },
+                height: 350
+            };
+            
+            Plotly.newPlot(containerId, [trace], layout, {displayModeBar: false});
+        }
+        
+        function createGapSummary() {
+            const gapSummary = document.getElementById('gapSummary');
+            
+            let totalGaps = 0;
+            let totalEligible = 0;
+            let sitesWithAnyGaps = 0;
+            
+            const siteGapData = {};
+            
+            dashboardData.gap_data.forEach(site => {
+                if (site.site !== 'Overall') {
+                    let siteTotalGaps = 0;
+                    let siteTotalEligible = 0;
+                    
+                    site.indicators.forEach(indicator => {
+                        siteTotalGaps += indicator.gap;
+                        siteTotalEligible += indicator.eligible;
+                    });
+                    
+                    totalGaps += siteTotalGaps;
+                    totalEligible += siteTotalEligible;
+                    
+                    siteGapData[site.site] = {
+                        gaps: siteTotalGaps,
+                        eligible: siteTotalEligible,
+                        percentage: siteTotalEligible > 0 ? (siteTotalGaps / siteTotalEligible * 100).toFixed(1) : 0
+                    };
+                    
+                    if (siteTotalGaps > 0) {
+                        sitesWithAnyGaps++;
+                    }
+                }
+            });
+            
+            const overallPercentage = totalEligible > 0 ? (totalGaps / totalEligible * 100).toFixed(1) : 0;
+            
+            const sortedSites = Object.entries(siteGapData)
+                .sort(([, a], [, b]) => b.gaps - a.gaps)
+                .slice(0, 3);
+            
+            const reportingSites = dashboardData.reporting_data.filter(d => d.site !== 'Overall');
+            const sitesBelow80Reporting = reportingSites.filter(d => d.reporting_rate_percentage < 80).length;
+            const sitesBelow50Reporting = reportingSites.filter(d => d.reporting_rate_percentage < 50).length;
+            const sitesBelow80Consistency = reportingSites.filter(d => d.consistency_rate_percentage < 80).length;
+            const sitesBelow50Consistency = reportingSites.filter(d => d.consistency_rate_percentage < 50).length;
+            
+            const summaryHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                    <div style="background: rgba(231, 76, 60, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid var(--danger);">
+                        <div style="font-size: 24px; font-weight: bold; color: var(--danger);">${totalGaps}/${totalEligible}</div>
+                        <div style="color: var(--dark); font-size: 14px;">Total Gaps (${overallPercentage}% of eligible)</div>
+                    </div>
+                    
+                    <div style="background: rgba(243, 156, 18, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid var(--warning);">
+                        <div style="font-size: 24px; font-weight: bold; color: var(--warning);">${sitesWithAnyGaps}</div>
+                        <div style="color: var(--dark); font-size: 14px;">Sites with Gaps</div>
+                    </div>
+                    
+                    <div style="background: rgba(52, 152, 219, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid var(--secondary);">
+                        <div style="font-size: 24px; font-weight: bold; color: var(--secondary);">${sitesBelow80Reporting}</div>
+                        <div style="color: var(--dark); font-size: 14px;">Sites with Reporting Rate < 80%</div>
+                    </div>
+                    
+                    <div style="background: rgba(39, 174, 96, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid var(--success);">
+                        <div style="font-size: 24px; font-weight: bold; color: var(--success);">${sitesBelow80Consistency}</div>
+                        <div style="color: var(--dark); font-size: 14px;">Sites with Consistency < 80%</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <p style="color: var(--dark); line-height: 1.6;">
+                        <strong>Key Findings:</strong> ${sitesWithAnyGaps} out of ${reportingSites.length} sites have identified gaps. 
+                        The top 3 sites contributing to gaps are: 
+                        ${sortedSites.map(([site, data]) => `<strong>${site}</strong> (${data.gaps} gaps, ${data.percentage}%)`).join(', ')}.
+                    </p>
+                    
+                    <p style="color: var(--dark); line-height: 1.6; margin-top: 10px;">
+                        <strong>Reporting Rate Concern:</strong> ${sitesBelow80Reporting} sites have reporting rates below 80%, 
+                        with ${sitesBelow50Reporting} sites critically low (<50%). 
+                        <strong>Consistency Issue:</strong> ${sitesBelow80Consistency} sites have consistency rates below 80%, 
+                        with ${sitesBelow50Consistency} sites critically low (<50%).
+                    </p>
+                </div>
+            `;
+            
+            gapSummary.innerHTML = summaryHTML;
+        }
+        
+        // ======================
+        // FILE UPLOAD FUNCTIONS
+        // ======================
+        
         document.getElementById('fileInput').addEventListener('change', handleFileSelect);
         
-        // Handle file selection
         function handleFileSelect(event) {
             const files = event.target.files;
             const fileList = document.getElementById('fileList');
@@ -685,7 +1560,6 @@
             updateGenerateButton();
         }
         
-        // Add file to list display
         function addFileToList(file) {
             const fileList = document.getElementById('fileList');
             const fileItem = document.createElement('div');
@@ -700,7 +1574,6 @@
             fileList.appendChild(fileItem);
         }
         
-        // Update generate button state
         function updateGenerateButton() {
             const hasGapFile = Object.keys(uploadedFiles).some(name => 
                 name.toLowerCase().includes('gap') || name.toLowerCase().includes('weekly_gap')
@@ -724,12 +1597,10 @@
             }
         }
         
-        // Process uploaded files
         async function processUploadedFiles() {
             showLoader('Processing Excel files...');
             
             try {
-                // Find the files
                 let gapFile, reportFile;
                 
                 for (const [name, file] of Object.entries(uploadedFiles)) {
@@ -744,12 +1615,9 @@
                     throw new Error('Required files not found');
                 }
                 
-                // Process gap data
                 const gapData = await processExcelFile(gapFile, 'gap');
-                // Process reporting data
                 const reportData = await processExcelFile(reportFile, 'report');
                 
-                // Combine data
                 dashboardData = {
                     gap_data: gapData,
                     reporting_data: reportData,
@@ -760,14 +1628,9 @@
                     }
                 };
                 
-                // Generate dashboard
                 generateDashboard();
+                showDashboard();
                 
-                // Show dashboard section
-                document.getElementById('dashboardSection').classList.add('active');
-                document.getElementById('dashboardSection').scrollIntoView({ behavior: 'smooth' });
-                
-                // Update file list status
                 const fileItems = document.querySelectorAll('.file-item');
                 fileItems.forEach(item => {
                     item.querySelector('div:last-child').textContent = '✓ Processed';
@@ -778,7 +1641,6 @@
                 console.error('Error processing files:', error);
                 alert(`Error: ${error.message}\n\nPlease make sure you uploaded the correct Excel files.`);
                 
-                // Update file list status
                 const fileItems = document.querySelectorAll('.file-item');
                 fileItems.forEach(item => {
                     item.querySelector('div:last-child').textContent = '✗ Error';
@@ -789,7 +1651,6 @@
             }
         }
         
-        // Process Excel file
         async function processExcelFile(file, type) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -819,11 +1680,9 @@
             });
         }
         
-        // Process gap data from Excel
         function processGapData(worksheet) {
             const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
             
-            // Find header row
             let headerRow = 0;
             for (let i = 0; i < Math.min(5, jsonData.length); i++) {
                 if (jsonData[i] && jsonData[i][0] && jsonData[i][0].toString().includes('HIV')) {
@@ -882,7 +1741,6 @@
             return structuredData;
         }
         
-        // Process reporting data from Excel
         function processReportingData(worksheet) {
             const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
             
@@ -929,806 +1787,49 @@
             return structuredData;
         }
         
-        // Generate dashboard with actual data
-        function generateDashboard() {
-            // Create KPI Overview
-            createKPIOverview();
-            
-            // Create Reporting Rate Chart (descending order)
-            createReportingRateChart();
-            
-            // Create Consistency Rate Chart (descending order)
-            createConsistencyChart();
-            
-            // Create Gap Distribution by Facility Chart
-            createGapDistributionChart();
-            
-            // Create Gap Analysis by Indicator
-            createGapAnalysisByIndicator();
-            
-            // Create Gap Summary
-            createGapSummary();
-        }
+        // ======================
+        // UTILITY FUNCTIONS
+        // ======================
         
-        // Create KPI Overview
-        function createKPIOverview() {
-            const kpiSection = document.getElementById('kpiSection');
-            const overallData = dashboardData.reporting_data.find(d => d.site === 'Overall') || dashboardData.reporting_data[0];
+        function exportDataToCSV() {
+            if (!dashboardData.gap_data.length || !dashboardData.reporting_data.length) {
+                alert('Please load data first');
+                return;
+            }
             
-            // Calculate total gaps and eligible
-            let totalGaps = 0;
-            let totalEligible = 0;
+            let csvContent = "Mkomani Clinic CBS Dashboard Data\n\n";
+            csvContent += "Generated: " + new Date().toLocaleString() + "\n";
+            csvContent += "Period: " + dashboardData.metadata.period + "\n\n";
             
-            dashboardData.gap_data.forEach(site => {
-                if (site.site !== 'Overall') {
-                    site.indicators.forEach(indicator => {
-                        totalGaps += indicator.gap;
-                        totalEligible += indicator.eligible;
-                    });
-                }
+            csvContent += "REPORTING DATA\n";
+            csvContent += "Site,Expected Uploads,Overall Reporting,Overall Consistency,Reporting %,Consistency %\n";
+            dashboardData.reporting_data.forEach(row => {
+                csvContent += `"${row.site}",${row.expected_uploads},${row.overall_reporting_rate},${row.overall_consistency_rate},${row.reporting_rate_percentage.toFixed(1)},${row.consistency_rate_percentage.toFixed(1)}\n`;
             });
             
-            // Calculate percentage
-            const gapPercentage = totalEligible > 0 ? ((totalGaps / totalEligible) * 100).toFixed(1) : 0;
-            
-            // Count active sites (excluding "Overall")
-            const activeSites = dashboardData.reporting_data.filter(d => d.site !== 'Overall').length;
-            
-            const kpiHTML = `
-                <div class="kpi-card">
-                    <div class="kpi-value" style="color: var(--success)">
-                        ${overallData ? overallData.reporting_rate_percentage + '%' : 'N/A'}
-                    </div>
-                    <div class="kpi-label">OVERALL REPORTING RATE</div>
-                    <div class="kpi-subtext">
-                        ${overallData ? overallData.overall_reporting_rate + '/' + overallData.expected_uploads + ' reports' : ''}
-                    </div>
-                </div>
-                
-                <div class="kpi-card">
-                    <div class="kpi-value" style="color: var(--secondary)">
-                        ${overallData ? overallData.consistency_rate_percentage + '%' : 'N/A'}
-                    </div>
-                    <div class="kpi-label">OVERALL CONSISTENCY RATE</div>
-                    <div class="kpi-subtext">Average across all sites</div>
-                </div>
-                
-                <div class="kpi-card">
-                    <div class="kpi-value" style="color: var(--warning)">${totalGaps}/${totalEligible}</div>
-                    <div class="kpi-label">TOTAL GAPS IDENTIFIED</div>
-                    <div class="kpi-subtext">${gapPercentage}% of eligible cases</div>
-                </div>
-                
-                <div class="kpi-card">
-                    <div class="kpi-value" style="color: var(--danger)">${activeSites}</div>
-                    <div class="kpi-label">ACTIVE SITES</div>
-                    <div class="kpi-subtext">Currently reporting</div>
-                </div>
-            `;
-            
-            kpiSection.innerHTML = kpiHTML;
-        }
-        
-        // Create Reporting Rate Chart (descending order)
-        function createReportingRateChart() {
-            // Filter out 'Overall' and sort in descending order
-            const sortedData = dashboardData.reporting_data
-                .filter(d => d.site !== 'Overall')
-                .sort((a, b) => b.reporting_rate_percentage - a.reporting_rate_percentage);
-            
-            const sites = sortedData.map(d => d.site);
-            const reportingRates = sortedData.map(d => d.reporting_rate_percentage);
-            const expected = sortedData.map(d => d.expected_uploads);
-            const reported = sortedData.map(d => d.overall_reporting_rate);
-            
-            // Create custom text for hover
-            const hoverText = sites.map((site, i) => 
-                `<b>${site}</b><br>` +
-                `Reporting Rate: ${reportingRates[i]}%<br>` +
-                `Reports: ${reported[i]}/${expected[i]}<br>` +
-                `Status: ${reportingRates[i] >= 80 ? 'Good' : reportingRates[i] >= 50 ? 'Fair' : 'Needs Attention'}`
-            );
-            
-            const trace = {
-                x: sites,
-                y: reportingRates,
-                type: 'bar',
-                marker: {
-                    color: reportingRates.map(rate => 
-                        rate >= 80 ? '#27ae60' : 
-                        rate >= 50 ? '#f39c12' : '#e74c3c'
-                    )
-                },
-                text: reportingRates.map(rate => rate + '%'),
-                textposition: 'outside',
-                hovertext: hoverText,
-                hoverinfo: 'text'
-            };
-            
-            const layout = {
-                title: {
-                    text: 'Reporting Rate by Site (Descending Order)',
-                    font: { size: 18 }
-                },
-                yaxis: {
-                    title: {
-                        text: 'Reporting Rate (%)',
-                        font: { size: 14 }
-                    },
-                    range: [0, 105],
-                    gridcolor: '#ecf0f1',
-                    tickformat: ',.0f'
-                },
-                xaxis: {
-                    title: {
-                        text: 'Site',
-                        font: { size: 14 }
-                    },
-                    tickangle: -45,
-                    gridcolor: '#ecf0f1',
-                    tickfont: { size: 12 }
-                },
-                plot_bgcolor: '#f8f9fa',
-                paper_bgcolor: '#f8f9fa',
-                showlegend: false,
-                displayModeBar: false,
-                displaylogo: false,
-                modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian', 'toggleSpikelines'],
-                margin: { t: 60, r: 40, b: 150, l: 80 },
-                height: 500,
-                width: document.getElementById('reportingRateChart').offsetWidth
-            };
-            
-            const config = {
-                displayModeBar: false,
-                displaylogo: false,
-                responsive: true
-            };
-            
-            Plotly.newPlot('reportingRateChart', [trace], layout, config);
-        }
-        
-        // Create Consistency Rate Chart (descending order)
-        function createConsistencyChart() {
-            // Filter out 'Overall' and sort in descending order
-            const sortedData = dashboardData.reporting_data
-                .filter(d => d.site !== 'Overall')
-                .sort((a, b) => b.consistency_rate_percentage - a.consistency_rate_percentage);
-            
-            const sites = sortedData.map(d => d.site);
-            const consistencyRates = sortedData.map(d => d.consistency_rate_percentage);
-            const expected = sortedData.map(d => d.expected_uploads);
-            const consistent = sortedData.map(d => d.overall_consistency_rate);
-            
-            // Create custom text for hover
-            const hoverText = sites.map((site, i) => 
-                `<b>${site}</b><br>` +
-                `Consistency Rate: ${consistencyRates[i]}%<br>` +
-                `Consistent Reports: ${consistent[i]}/${expected[i]}<br>` +
-                `Status: ${consistencyRates[i] >= 80 ? 'Good' : consistencyRates[i] >= 50 ? 'Fair' : 'Needs Attention'}`
-            );
-            
-            const trace = {
-                x: sites,
-                y: consistencyRates,
-                type: 'bar',
-                marker: {
-                    color: consistencyRates.map(rate => 
-                        rate >= 80 ? '#27ae60' : 
-                        rate >= 50 ? '#f39c12' : '#e74c3c'
-                    )
-                },
-                text: consistencyRates.map(rate => rate + '%'),
-                textposition: 'outside',
-                hovertext: hoverText,
-                hoverinfo: 'text'
-            };
-            
-            const layout = {
-                title: {
-                    text: 'Consistency Rate by Site (Descending Order)',
-                    font: { size: 18 }
-                },
-                yaxis: {
-                    title: {
-                        text: 'Consistency Rate (%)',
-                        font: { size: 14 }
-                    },
-                    range: [0, 105],
-                    gridcolor: '#ecf0f1',
-                    tickformat: ',.0f'
-                },
-                xaxis: {
-                    title: {
-                        text: 'Site',
-                        font: { size: 14 }
-                    },
-                    tickangle: -45,
-                    gridcolor: '#ecf0f1',
-                    tickfont: { size: 12 }
-                },
-                plot_bgcolor: '#f8f9fa',
-                paper_bgcolor: '#f8f9fa',
-                showlegend: false,
-                displayModeBar: false,
-                displaylogo: false,
-                modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian', 'toggleSpikelines'],
-                margin: { t: 60, r: 40, b: 150, l: 80 },
-                height: 500,
-                width: document.getElementById('consistencyChart').offsetWidth
-            };
-            
-            const config = {
-                displayModeBar: false,
-                displaylogo: false,
-                responsive: true
-            };
-            
-            Plotly.newPlot('consistencyChart', [trace], layout, config);
-        }
-        
-        // Create Gap Distribution by Facility Chart
-        function createGapDistributionChart() {
-            // Calculate total gaps for each facility (excluding 'Overall')
-            const facilityGapData = [];
-            
+            csvContent += "\nGAP ANALYSIS DATA\n";
+            csvContent += "Site,Indicator,Gap Count,Eligible Count,Gap Percentage\n";
             dashboardData.gap_data.forEach(site => {
-                if (site.site !== 'Overall') {
-                    let totalGaps = 0;
-                    let totalEligible = 0;
-                    
-                    site.indicators.forEach(indicator => {
-                        totalGaps += indicator.gap;
-                        totalEligible += indicator.eligible;
-                    });
-                    
-                    const gapPercentage = totalEligible > 0 ? ((totalGaps / totalEligible) * 100).toFixed(1) : 0;
-                    
-                    facilityGapData.push({
-                        site: site.site,
-                        totalGaps: totalGaps,
-                        totalEligible: totalEligible,
-                        gapPercentage: parseFloat(gapPercentage),
-                        displayText: `${site.site} ${gapPercentage}% (${totalGaps}/${totalEligible})`
-                    });
-                }
-            });
-            
-            // Sort facilities by gap percentage (descending)
-            facilityGapData.sort((a, b) => b.gapPercentage - a.gapPercentage);
-            
-            // Extract data for chart
-            const sites = facilityGapData.map(d => d.displayText);
-            const gapPercentages = facilityGapData.map(d => d.gapPercentage);
-            const totalGaps = facilityGapData.map(d => d.totalGaps);
-            const totalEligible = facilityGapData.map(d => d.totalEligible);
-            
-            // Create custom text for hover
-            const hoverText = sites.map((site, i) => 
-                `<b>${facilityGapData[i].site}</b><br>` +
-                `Overall Gap Percentage: ${gapPercentages[i]}%<br>` +
-                `Total Gaps: ${totalGaps[i]}/${totalEligible[i]}<br>` +
-                `Rank: #${i + 1}`
-            );
-            
-            const trace = {
-                x: sites,
-                y: gapPercentages,
-                type: 'bar',
-                marker: {
-                    color: gapPercentages.map(percentage => {
-                        if (percentage >= 70) return '#e74c3c';      // Red for critical
-                        if (percentage >= 50) return '#f39c12';      // Orange for high
-                        if (percentage >= 30) return '#f1c40f';      // Yellow for medium
-                        return '#27ae60';                           // Green for low
-                    }),
-                    line: {
-                        color: 'rgba(0,0,0,0.2)',
-                        width: 1
-                    }
-                },
-                text: gapPercentages.map(p => p + '%'),
-                textposition: 'outside',
-                hovertext: hoverText,
-                hoverinfo: 'text'
-            };
-            
-            const layout = {
-                title: {
-                    text: 'Gap Distribution by Facility (Ranked Highest to Lowest)',
-                    font: { size: 18 }
-                },
-                yaxis: {
-                    title: {
-                        text: 'Overall Gap Percentage (%)',
-                        font: { size: 14 }
-                    },
-                    range: [0, 105],
-                    gridcolor: '#ecf0f1',
-                    tickformat: ',.0f'
-                },
-                xaxis: {
-                    title: {
-                        text: 'Facility (Gap Percentage - Gaps/Eligible)',
-                        font: { size: 14 }
-                    },
-                    tickangle: -45,
-                    gridcolor: '#ecf0f1',
-                    tickfont: { size: 12 }
-                },
-                plot_bgcolor: '#f8f9fa',
-                paper_bgcolor: '#f8f9fa',
-                showlegend: false,
-                displayModeBar: false,
-                displaylogo: false,
-                modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian', 'toggleSpikelines'],
-                margin: { t: 60, r: 40, b: 200, l: 80 },
-                height: 500,
-                width: document.getElementById('gapDistributionChart').offsetWidth
-            };
-            
-            const config = {
-                displayModeBar: false,
-                displaylogo: false,
-                responsive: true
-            };
-            
-            Plotly.newPlot('gapDistributionChart', [trace], layout, config);
-        }
-        
-        // Create Gap Analysis by Indicator
-        function createGapAnalysisByIndicator() {
-            const delayedVLContainer = document.getElementById('delayedVLChartContainer');
-            const otherGapsGrid = document.getElementById('otherGapsGrid');
-            
-            // Define indicators with short names for display
-            const indicators = [
-                { 
-                    fullName: "Delayed Viral Load Testing",
-                    shortName: "Delayed VL",
-                    color: '#e67e22',
-                    index: 3,
-                    priority: 1
-                },
-                { 
-                    fullName: "HEI (24 Months) Without Final Documented Outcome",
-                    shortName: "HEI No Outcome",
-                    color: '#c0392b',
-                    index: 5,
-                    priority: 0
-                },
-                { 
-                    fullName: "HIV +ve Clients Not Linked to ART",
-                    shortName: "HIV+ Not Linked",
-                    color: '#e74c3c',
-                    index: 0,
-                    priority: 0
-                },
-                { 
-                    fullName: "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP",
-                    shortName: "High-Risk No PrEP",
-                    color: '#f39c12',
-                    index: 1,
-                    priority: 0
-                },
-                { 
-                    fullName: "Virally Unsuppressed Clients Without EAC Within 2 Weeks",
-                    shortName: "Unsuppressed No EAC",
-                    color: '#f1c40f',
-                    index: 2,
-                    priority: 0
-                },
-                { 
-                    fullName: "HEI (6-8 Weeks) Without DNA PCR Results",
-                    shortName: "HEI No DNA PCR",
-                    color: '#d35400',
-                    index: 4,
-                    priority: 0
-                }
-            ];
-            
-            // Clear containers
-            delayedVLContainer.innerHTML = '';
-            otherGapsGrid.innerHTML = '';
-            
-            // Process each indicator
-            indicators.forEach((indicator, indicatorIdx) => {
-                // Get data for this indicator across all sites (excluding Overall)
-                const sitesWithGaps = [];
-                
-                dashboardData.gap_data.forEach(site => {
-                    if (site.site !== 'Overall' && site.indicators[indicator.index]) {
-                        const gapData = site.indicators[indicator.index];
-                        if (gapData.gap > 0) {
-                            sitesWithGaps.push({
-                                site: site.site,
-                                gap: gapData.gap,
-                                eligible: gapData.eligible,
-                                percentage: gapData.gap_percentage
-                            });
-                        }
-                    }
+                site.indicators.forEach(indicator => {
+                    csvContent += `"${site.site}","${indicator.indicator}",${indicator.gap},${indicator.eligible},${indicator.gap_percentage.toFixed(1)}\n`;
                 });
-                
-                // Sort sites by gap count (descending)
-                sitesWithGaps.sort((a, b) => b.gap - a.gap);
-                
-                // Only create chart if there are facilities with gaps
-                if (sitesWithGaps.length > 0) {
-                    const siteNames = sitesWithGaps.map(d => d.site);
-                    const gaps = sitesWithGaps.map(d => d.gap);
-                    const percentages = sitesWithGaps.map(d => d.percentage);
-                    
-                    // Calculate totals
-                    const totalGaps = gaps.reduce((a, b) => a + b, 0);
-                    const totalEligible = sitesWithGaps.reduce((sum, d) => sum + d.eligible, 0);
-                    const overallPercentage = totalEligible > 0 ? ((totalGaps / totalEligible) * 100).toFixed(1) : 0;
-                    
-                    // Create chart container
-                    const chartId = `gapChart${indicator.index}`;
-                    
-                    // Delayed VL gets full width container
-                    if (indicator.priority === 1) {
-                        delayedVLContainer.innerHTML = `
-                            <div class="gap-indicator-card" style="border-left: 4px solid ${indicator.color};">
-                                <div class="gap-indicator-title">
-                                    ${indicator.shortName} - ${totalGaps} gaps (${overallPercentage}% of ${totalEligible} eligible)
-                                </div>
-                                <div id="${chartId}" class="chart-container"></div>
-                            </div>
-                        `;
-                        
-                        // Create the chart
-                        setTimeout(() => {
-                            createFullWidthGapChart(chartId, indicator.shortName, siteNames, gaps, percentages, indicator.color, totalGaps, overallPercentage, totalEligible);
-                        }, 100);
-                    } else {
-                        // Other gaps go in the grid
-                        const gapCard = document.createElement('div');
-                        gapCard.className = 'gap-indicator-card';
-                        gapCard.style.borderLeft = `4px solid ${indicator.color}`;
-                        gapCard.innerHTML = `
-                            <div class="gap-indicator-title">
-                                ${indicator.shortName} - ${totalGaps} gaps (${overallPercentage}% of ${totalEligible} eligible)
-                            </div>
-                            <div id="${chartId}" class="gap-chart-container"></div>
-                        `;
-                        otherGapsGrid.appendChild(gapCard);
-                        
-                        // Create the chart
-                        setTimeout(() => {
-                            createSmallGapChart(chartId, indicator.shortName, siteNames, gaps, percentages, indicator.color);
-                        }, 100 + (indicatorIdx * 50));
-                    }
-                }
-            });
-        }
-        
-        // Create full width gap chart for Delayed VL
-        function createFullWidthGapChart(containerId, indicatorName, sites, gaps, percentages, color, totalGaps, overallPercentage, totalEligible) {
-            // Create custom text for hover
-            const hoverText = sites.map((site, i) => 
-                `<b>${site}</b><br>` +
-                `Gaps: ${gaps[i]}<br>` +
-                `Percentage: ${percentages[i]}%<br>` +
-                `Impact: ${gaps[i] > 50 ? 'Critical' : gaps[i] > 20 ? 'High' : gaps[i] > 5 ? 'Medium' : 'Low'}`
-            );
-            
-            const trace = {
-                x: sites,
-                y: gaps,
-                type: 'bar',
-                marker: {
-                    color: color,
-                    line: {
-                        color: 'rgba(0,0,0,0.2)',
-                        width: 1
-                    }
-                },
-                text: gaps.map((gap, i) => `${gap} (${percentages[i]}%)`),
-                textposition: 'outside',
-                hovertext: hoverText,
-                hoverinfo: 'text'
-            };
-            
-            const layout = {
-                title: {
-                    text: `${indicatorName} - ${totalGaps} Gaps (${overallPercentage}% of ${totalEligible} Eligible)`,
-                    font: { size: 18 }
-                },
-                yaxis: {
-                    title: {
-                        text: 'Number of Gaps',
-                        font: { size: 14 }
-                    },
-                    gridcolor: '#ecf0f1'
-                },
-                xaxis: {
-                    title: {
-                        text: 'Facility',
-                        font: { size: 14 }
-                    },
-                    tickangle: -45,
-                    gridcolor: '#ecf0f1',
-                    tickfont: { size: 12 }
-                },
-                plot_bgcolor: '#f8f9fa',
-                paper_bgcolor: '#f8f9fa',
-                showlegend: false,
-                displayModeBar: false,
-                displaylogo: false,
-                modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian', 'toggleSpikelines'],
-                margin: { t: 60, r: 40, b: 150, l: 80 },
-                height: 500,
-                width: document.getElementById(containerId).offsetWidth
-            };
-            
-            const config = {
-                displayModeBar: false,
-                displaylogo: false,
-                responsive: true
-            };
-            
-            Plotly.newPlot(containerId, [trace], layout, config);
-        }
-        
-        // Create small gap chart for other indicators
-        function createSmallGapChart(containerId, indicatorName, sites, gaps, percentages, color) {
-            // Create custom text for hover
-            const hoverText = sites.map((site, i) => 
-                `<b>${site}</b><br>` +
-                `Gaps: ${gaps[i]}<br>` +
-                `Percentage: ${percentages[i]}%<br>` +
-                `Impact: ${gaps[i] > 10 ? 'High' : gaps[i] > 5 ? 'Medium' : 'Low'}`
-            );
-            
-            const trace = {
-                x: sites,
-                y: gaps,
-                type: 'bar',
-                marker: {
-                    color: color,
-                    line: {
-                        color: 'rgba(0,0,0,0.2)',
-                        width: 1
-                    }
-                },
-                text: gaps.map((gap, i) => `${gap} (${percentages[i]}%)`),
-                textposition: 'outside',
-                hovertext: hoverText,
-                hoverinfo: 'text'
-            };
-            
-            const layout = {
-                title: {
-                    text: `Facilities with ${indicatorName} Gaps`,
-                    font: { size: 16 }
-                },
-                yaxis: {
-                    title: {
-                        text: 'Number of Gaps',
-                        font: { size: 12 }
-                    },
-                    gridcolor: '#ecf0f1'
-                },
-                xaxis: {
-                    title: {
-                        text: 'Facility',
-                        font: { size: 12 }
-                    },
-                    tickangle: -45,
-                    gridcolor: '#ecf0f1',
-                    tickfont: { size: 10 }
-                },
-                plot_bgcolor: '#f8f9fa',
-                paper_bgcolor: '#f8f9fa',
-                showlegend: false,
-                displayModeBar: false,
-                displaylogo: false,
-                modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian', 'toggleSpikelines'],
-                margin: { t: 50, r: 30, b: 120, l: 60 },
-                height: 350,
-                width: document.getElementById(containerId).offsetWidth
-            };
-            
-            const config = {
-                displayModeBar: false,
-                displaylogo: false,
-                responsive: true
-            };
-            
-            Plotly.newPlot(containerId, [trace], layout, config);
-        }
-        
-        // Create Gap Summary
-        function createGapSummary() {
-            const gapSummary = document.getElementById('gapSummary');
-            
-            // Calculate overall statistics
-            let totalGaps = 0;
-            let totalEligible = 0;
-            let sitesWithAnyGaps = 0;
-            
-            const siteGapData = {};
-            
-            dashboardData.gap_data.forEach(site => {
-                if (site.site !== 'Overall') {
-                    let siteTotalGaps = 0;
-                    let siteTotalEligible = 0;
-                    
-                    site.indicators.forEach(indicator => {
-                        siteTotalGaps += indicator.gap;
-                        siteTotalEligible += indicator.eligible;
-                    });
-                    
-                    totalGaps += siteTotalGaps;
-                    totalEligible += siteTotalEligible;
-                    
-                    siteGapData[site.site] = {
-                        gaps: siteTotalGaps,
-                        eligible: siteTotalEligible,
-                        percentage: siteTotalEligible > 0 ? (siteTotalGaps / siteTotalEligible * 100).toFixed(1) : 0
-                    };
-                    
-                    if (siteTotalGaps > 0) {
-                        sitesWithAnyGaps++;
-                    }
-                }
             });
             
-            // Calculate overall percentage
-            const overallPercentage = totalEligible > 0 ? (totalGaps / totalEligible * 100).toFixed(1) : 0;
-            
-            // Find top 3 sites with highest gaps
-            const sortedSites = Object.entries(siteGapData)
-                .sort(([, a], [, b]) => b.gaps - a.gaps)
-                .slice(0, 3);
-            
-            // Get reporting rate statistics
-            const reportingSites = dashboardData.reporting_data.filter(d => d.site !== 'Overall');
-            const sitesBelow80Reporting = reportingSites.filter(d => d.reporting_rate_percentage < 80).length;
-            const sitesBelow50Reporting = reportingSites.filter(d => d.reporting_rate_percentage < 50).length;
-            const sitesBelow80Consistency = reportingSites.filter(d => d.consistency_rate_percentage < 80).length;
-            const sitesBelow50Consistency = reportingSites.filter(d => d.consistency_rate_percentage < 50).length;
-            
-            const summaryHTML = `
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px;">
-                    <div style="background: rgba(231, 76, 60, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid var(--danger);">
-                        <div style="font-size: 24px; font-weight: bold; color: var(--danger);">${totalGaps}/${totalEligible}</div>
-                        <div style="color: var(--dark); font-size: 14px;">Total Gaps (${overallPercentage}% of eligible)</div>
-                    </div>
-                    
-                    <div style="background: rgba(243, 156, 18, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid var(--warning);">
-                        <div style="font-size: 24px; font-weight: bold; color: var(--warning);">${sitesWithAnyGaps}</div>
-                        <div style="color: var(--dark); font-size: 14px;">Sites with Gaps</div>
-                    </div>
-                    
-                    <div style="background: rgba(52, 152, 219, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid var(--secondary);">
-                        <div style="font-size: 24px; font-weight: bold; color: var(--secondary);">${sitesBelow80Reporting}</div>
-                        <div style="color: var(--dark); font-size: 14px;">Sites with Reporting Rate < 80%</div>
-                    </div>
-                    
-                    <div style="background: rgba(39, 174, 96, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid var(--success);">
-                        <div style="font-size: 24px; font-weight: bold; color: var(--success);">${sitesBelow80Consistency}</div>
-                        <div style="color: var(--dark); font-size: 14px;">Sites with Consistency < 80%</div>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 20px;">
-                    <p style="color: var(--dark); line-height: 1.6;">
-                        <strong>Key Findings:</strong> ${sitesWithAnyGaps} out of ${reportingSites.length} sites have identified gaps. 
-                        The top 3 sites contributing to gaps are: 
-                        ${sortedSites.map(([site, data]) => `<strong>${site}</strong> (${data.gaps} gaps, ${data.percentage}%)`).join(', ')}.
-                    </p>
-                    
-                    <p style="color: var(--dark); line-height: 1.6; margin-top: 10px;">
-                        <strong>Reporting Rate Concern:</strong> ${sitesBelow80Reporting} sites have reporting rates below 80%, 
-                        with ${sitesBelow50Reporting} sites critically low (<50%). 
-                        <strong>Consistency Issue:</strong> ${sitesBelow80Consistency} sites have consistency rates below 80%, 
-                        with ${sitesBelow50Consistency} sites critically low (<50%).
-                    </p>
-                </div>
-            `;
-            
-            gapSummary.innerHTML = summaryHTML;
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `CBS_Dashboard_Export_${new Date().toISOString().slice(0,10)}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
         
-        // Show sample data
-        function showSampleData() {
-            showLoader('Loading sample data...');
-            
-            // Sample data
-            dashboardData = {
-                gap_data: [
-                    {
-                        site: "Overall",
-                        indicators: [
-                            { indicator: "HIV +ve Clients Not Linked to ART", gap: 9, eligible: 16, gap_percentage: 56.3 },
-                            { indicator: "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", gap: 7, eligible: 7, gap_percentage: 100 },
-                            { indicator: "Virally Unsuppressed Clients Without EAC Within 2 Weeks", gap: 0, eligible: 0, gap_percentage: 0 },
-                            { indicator: "Delayed Viral Load Testing", gap: 570, eligible: 644, gap_percentage: 88.5 },
-                            { indicator: "HEI (6-8 Weeks) Without DNA PCR Results", gap: 2, eligible: 2, gap_percentage: 100 },
-                            { indicator: "HEI (24 Months) Without Final Documented Outcome", gap: 1, eligible: 9, gap_percentage: 11.1 }
-                        ]
-                    },
-                    {
-                        site: "Bomu Likoni",
-                        indicators: [
-                            { indicator: "HIV +ve Clients Not Linked to ART", gap: 3, eligible: 3, gap_percentage: 100 },
-                            { indicator: "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", gap: 0, eligible: 0, gap_percentage: 0 },
-                            { indicator: "Virally Unsuppressed Clients Without EAC Within 2 Weeks", gap: 0, eligible: 0, gap_percentage: 0 },
-                            { indicator: "Delayed Viral Load Testing", gap: 159, eligible: 170, gap_percentage: 93.5 },
-                            { indicator: "HEI (6-8 Weeks) Without DNA PCR Results", gap: 1, eligible: 1, gap_percentage: 100 },
-                            { indicator: "HEI (24 Months) Without Final Documented Outcome", gap: 0, eligible: 1, gap_percentage: 0 }
-                        ]
-                    },
-                    {
-                        site: "Bomu Changamwe",
-                        indicators: [
-                            { indicator: "HIV +ve Clients Not Linked to ART", gap: 2, eligible: 2, gap_percentage: 100 },
-                            { indicator: "HIV Negative High-Risk Pregnant/Postpartum Women not Enrolled on PrEP", gap: 1, eligible: 1, gap_percentage: 100 },
-                            { indicator: "Virally Unsuppressed Clients Without EAC Within 2 Weeks", gap: 0, eligible: 0, gap_percentage: 0 },
-                            { indicator: "Delayed Viral Load Testing", gap: 172, eligible: 206, gap_percentage: 83.5 },
-                            { indicator: "HEI (6-8 Weeks) Without DNA PCR Results", gap: 0, eligible: 0, gap_percentage: 0 },
-                            { indicator: "HEI (24 Months) Without Final Documented Outcome", gap: 1, eligible: 3, gap_percentage: 33.3 }
-                        ]
-                    }
-                ],
-                reporting_data: [
-                    { site: "Overall", expected_uploads: 14, overall_reporting_rate: 13, overall_consistency_rate: 8, reporting_rate_percentage: 92.9, consistency_rate_percentage: 57.1 },
-                    { site: "Bomu Likoni", expected_uploads: 7, overall_reporting_rate: 7, overall_consistency_rate: 7, reporting_rate_percentage: 100, consistency_rate_percentage: 100 },
-                    { site: "Bomu Changamwe", expected_uploads: 7, overall_reporting_rate: 7, overall_consistency_rate: 7, reporting_rate_percentage: 100, consistency_rate_percentage: 100 },
-                    { site: "Bomu OldTown", expected_uploads: 7, overall_reporting_rate: 2, overall_consistency_rate: 0, reporting_rate_percentage: 28.6, consistency_rate_percentage: 0 },
-                    { site: "Bomu Bombolulu", expected_uploads: 7, overall_reporting_rate: 6, overall_consistency_rate: 1, reporting_rate_percentage: 85.7, consistency_rate_percentage: 14.3 }
-                ],
-                metadata: {
-                    period: "24th - 28th Nov 2025",
-                    generated: new Date().toISOString(),
-                    note: "Sample data for preview"
-                }
-            };
-            
-            // Generate dashboard
-            generateDashboard();
-            
-            // Show dashboard section
-            document.getElementById('dashboardSection').classList.add('active');
-            document.getElementById('dashboardSection').scrollIntoView({ behavior: 'smooth' });
-            
-            // Show success message
-            const successAlert = document.getElementById('successAlert');
-            successAlert.innerHTML = '✅ Sample data loaded! Upload your own Excel files for real data.';
-            successAlert.style.display = 'flex';
-            
-            hideLoader();
-        }
-        
-        // Print dashboard
         function printDashboard() {
             window.print();
         }
         
-        // Reset dashboard
-        function resetDashboard() {
-            if (confirm('Are you sure you want to upload new data? The current dashboard will be reset.')) {
-                dashboardData = {
-                    gap_data: [],
-                    reporting_data: [],
-                    metadata: {}
-                };
-                
-                uploadedFiles = {};
-                
-                document.getElementById('fileList').innerHTML = '';
-                document.getElementById('dashboardSection').classList.remove('active');
-                document.getElementById('successAlert').style.display = 'none';
-                document.getElementById('generateBtn').disabled = true;
-                
-                window.scrollTo(0, 0);
-            }
-        }
-        
-        // Loader functions
         function showLoader(text) {
             document.getElementById('loaderText').textContent = text;
             document.getElementById('loader').classList.add('active');
@@ -1737,6 +1838,12 @@
         function hideLoader() {
             document.getElementById('loader').classList.remove('active');
         }
+        
+        // Auto-load dashboard after 1 second (optional)
+        setTimeout(() => {
+            // Uncomment the next line if you want dashboard to auto-load
+            // loadRealData();
+        }, 1000);
     </script>
 </body>
 </html>
